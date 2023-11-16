@@ -25,18 +25,64 @@ AGamePaddle::AGamePaddle()
 }
 
 
-void AGamePaddle::PaddleStart()
+void AGamePaddle::UpdatePaddle()
 {
 
+}
 
 
+void AGamePaddle::PaddleStart()
+{
     FRotator NewRotation = GetActorRotation();
 
-    NewRotation.Yaw -= 444.0f * GetWorld()->GetDeltaSeconds();
 
+    if (paddleSide == EPaddleSide::PaddleSide_Left && deltaYaw > -75.0f)
+    {
+
+        NewRotation.Yaw -= 444.0f * GetWorld()->GetDeltaSeconds();
+        deltaYaw -= 444.0f * GetWorld()->GetDeltaSeconds();
+        UE_LOG(LogTemp, Warning, TEXT("Failed to load mesh for resident %f!"), deltaYaw);
+
+    }
+    else if (paddleSide == EPaddleSide::PaddleSide_Right)
+    {
+        NewRotation.Yaw += 444.0f * GetWorld()->GetDeltaSeconds();
+
+    }
+    FQuat QuatRotation = FQuat(NewRotation);
+
+    SetActorRotation(QuatRotation);
+   
+
+   
+
+ 
+}
+
+
+
+
+
+void AGamePaddle::PaddleRelease()
+{
+    FRotator NewRotation = GetActorRotation();
+
+
+    if (paddleSide == EPaddleSide::PaddleSide_Left && deltaYaw > -75.0f)
+    {
+
+        NewRotation.Yaw -= 444.0f * GetWorld()->GetDeltaSeconds();
+        deltaYaw -= 444.0f * GetWorld()->GetDeltaSeconds();
+        UE_LOG(LogTemp, Warning, TEXT("Failed to load mesh for resident %f!"), deltaYaw);
+
+    }
+    else if (paddleSide == EPaddleSide::PaddleSide_Right)
+    {
+        NewRotation.Yaw += 444.0f * GetWorld()->GetDeltaSeconds();
+
+    }
     FQuat QuatRotation = FQuat(NewRotation);
 
     SetActorRotation(QuatRotation);
 
-    //AddActorLocalRotation(QuatRotation, false, 0, ETeleportType::None);
 }

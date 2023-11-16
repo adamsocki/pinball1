@@ -149,14 +149,17 @@ void Apinball1Character::LeftPaddleCompleted()
 // RIGHT PADDLE CODE FUNCTIONS
 void Apinball1Character::RightPaddleStart()
 {
+
+}
+
+void Apinball1Character::RightPaddleTriggered()
+{
+	gameManager->paddleRight->PaddleStart();
+
 }
 void Apinball1Character::RightPaddleCompleted()
 {
 }
-void Apinball1Character::RightPaddleTriggered()
-{
-}
-
 void Apinball1Character::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
