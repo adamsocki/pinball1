@@ -14,7 +14,9 @@ UCLASS()
 class PINBALL1_API AGamePaddle : public AActor
 {
 	GENERATED_BODY()
-	
+
+private: 
+	float AccumulatedRotation;
 public:	
 	// Sets default values for this actor's properties
 	AGamePaddle();

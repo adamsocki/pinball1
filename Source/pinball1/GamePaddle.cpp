@@ -28,35 +28,41 @@ AGamePaddle::AGamePaddle()
 void AGamePaddle::UpdatePaddle()
 {
 
+
+
 }
 
 
 void AGamePaddle::PaddleStart()
 {
     FRotator NewRotation = GetActorRotation();
+    float RotationSpeed = 600.10f; // Rotation speed in degrees per second
+    float DeltaTime = GetWorld()->GetDeltaSeconds();
+    UE_LOG(LogTemp, Warning, TEXT("Rotation: %f"), NewRotation.Yaw);
 
-
-    if (paddleSide == EPaddleSide::PaddleSide_Left && deltaYaw > -75.0f)
+    if (paddleSide == EPaddleSide::PaddleSide_Left)
     {
-
-        NewRotation.Yaw -= 444.0f * GetWorld()->GetDeltaSeconds();
-        deltaYaw -= 444.0f * GetWorld()->GetDeltaSeconds();
-        UE_LOG(LogTemp, Warning, TEXT("Failed to load mesh for resident %f!"), deltaYaw);
-
+        RotationSpeed = -RotationSpeed;
     }
-    else if (paddleSide == EPaddleSide::PaddleSide_Right)
+
+    // Calculate the desired rotation
+    float DesiredRotation = RotationSpeed * DeltaTime;
+
+    // Check and adjust to ensure we don't exceed the maximum allowed rotation
+    float MaxRotationDegrees = 85.0f; // set your max rotation limit here
+    if (FMath::Abs(AccumulatedRotation + DesiredRotation) > MaxRotationDegrees)
     {
-        NewRotation.Yaw += 444.0f * GetWorld()->GetDeltaSeconds();
-
+        // Adjust DesiredRotation so that AccumulatedRotation does not exceed MaxRotationDegrees
+        DesiredRotation = MaxRotationDegrees - FMath::Abs(AccumulatedRotation);
+        DesiredRotation *= FMath::Sign(RotationSpeed); // Ensure the rotation is in the correct direction
     }
-    FQuat QuatRotation = FQuat(NewRotation);
 
-    SetActorRotation(QuatRotation);
-   
+    // Apply the rotation
+    FQuat QuatRotation = FQuat(FRotator(0.f, DesiredRotation, 0.f));
+    AddActorLocalRotation(QuatRotation);
 
-   
-
- 
+    // Update accumulated rotation
+    AccumulatedRotation += DesiredRotation;
 }
 
 
