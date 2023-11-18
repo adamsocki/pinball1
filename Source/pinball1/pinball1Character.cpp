@@ -23,17 +23,23 @@ DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 Apinball1Character::Apinball1Character()
 {
 	// Set size for collision capsule
-	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+	//GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
-	static ConstructorHelpers::FObjectFinder<UInputAction> LeftShiftKeyboard(TEXT("/Script/EnhancedInput.InputAction'/Game/ThirdPerson/Input/Actions/IA_Shift_Left.IA_Shift_Left'"));
-	if (LeftShiftKeyboard.Succeeded())
+	static ConstructorHelpers::FObjectFinder<UInputAction> LeftPaddleKeyboard(TEXT("/Script/EnhancedInput.InputAction'/Game/ThirdPerson/Input/Actions/IA_Paddle_Left.IA_Paddle_Left'"));
+	if (LeftPaddleKeyboard.Succeeded())
 	{
-		LeftPaddleKey = LeftShiftKeyboard.Object;
+		LeftPaddleKey = LeftPaddleKeyboard.Object;
 	}
-	static ConstructorHelpers::FObjectFinder<UInputAction> RightShiftKeyboard(TEXT("/Script/EnhancedInput.InputAction'/Game/ThirdPerson/Input/Actions/IA_Shift_Right.IA_Shift_Right'"));
-	if (RightShiftKeyboard.Succeeded())
+	static ConstructorHelpers::FObjectFinder<UInputAction> RightPaddleKeyboard(TEXT("/Script/EnhancedInput.InputAction'/Game/ThirdPerson/Input/Actions/IA_Paddle_Right.IA_Paddle_Right'"));
+	if (RightPaddleKeyboard.Succeeded())
 	{
-		RightPaddleKey = RightShiftKeyboard.Object;
+		RightPaddleKey = RightPaddleKeyboard.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> PlungerSpaceKeyboard(TEXT("/Script/EnhancedInput.InputAction'/Game/ThirdPerson/Input/Actions/IA_Plunger_Space.IA_Plunger_Space'"));
+	if (PlungerSpaceKeyboard.Succeeded())
+	{
+		SpacePlungerKey = PlungerSpaceKeyboard.Object;
 	}
 		
 	// Don't rotate when the controller rotates. Let that just affect the camera.
@@ -124,6 +130,10 @@ void Apinball1Character::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindAction(RightPaddleKey, ETriggerEvent::Started, this, &Apinball1Character::RightPaddleStart);
 		EnhancedInputComponent->BindAction(RightPaddleKey, ETriggerEvent::Triggered, this, &Apinball1Character::RightPaddleTriggered);
 		EnhancedInputComponent->BindAction(RightPaddleKey, ETriggerEvent::Completed, this, &Apinball1Character::RightPaddleCompleted);
+		// SPACE PLUNGER
+		EnhancedInputComponent->BindAction(SpacePlungerKey, ETriggerEvent::Started, this, &Apinball1Character::SpacePlungerStart);
+		EnhancedInputComponent->BindAction(SpacePlungerKey, ETriggerEvent::Triggered, this, &Apinball1Character::SpacePlungerTriggered);
+		EnhancedInputComponent->BindAction(SpacePlungerKey, ETriggerEvent::Completed, this, &Apinball1Character::SpacePlungerCompleted);
 	
 	}
 	else
@@ -135,31 +145,48 @@ void Apinball1Character::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 // LEFT PADDLE CODE FUNCTIONS
 void Apinball1Character::LeftPaddleStart()
 {
+	gameManager->paddleLeft->PaddleStartPlayerInput();
 }
 
 void Apinball1Character::LeftPaddleTriggered()
 {
-	gameManager->paddleLeft->PaddleStart();
 }
 
 void Apinball1Character::LeftPaddleCompleted()
 {
+	gameManager->paddleLeft->PaddleReleasePlayerInput();
 }
 
 // RIGHT PADDLE CODE FUNCTIONS
 void Apinball1Character::RightPaddleStart()
 {
-
+	gameManager->paddleRight->PaddleStartPlayerInput();
 }
-
 void Apinball1Character::RightPaddleTriggered()
 {
-	gameManager->paddleRight->PaddleStart();
-
 }
 void Apinball1Character::RightPaddleCompleted()
 {
+	gameManager->paddleRight->PaddleReleasePlayerInput();
 }
+
+
+// SPACE PLUNGER CODE FUNCTIONS
+void Apinball1Character::SpacePlungerStart()
+{
+
+}
+
+void Apinball1Character::SpacePlungerTriggered()
+{
+
+}
+
+void Apinball1Character::SpacePlungerCompleted()
+{
+
+}
+
 void Apinball1Character::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D

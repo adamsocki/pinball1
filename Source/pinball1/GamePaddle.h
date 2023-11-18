@@ -21,6 +21,7 @@ public:
 	// Sets default values for this actor's properties
 	AGamePaddle();
 
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "BallSetup")
 	EPaddleSide paddleSide;
 
@@ -30,13 +31,19 @@ public:
 	//UPROPERTY(VisibleAnywhere)
 	//USphereComponent* TriggerSphere;
 
+	void InitPaddle();
 	void UpdatePaddle();
 
 
-	void PaddleStart();
-	void PaddleRelease();
+	void PaddleStartPlayerInput();
+	void PaddleReleasePlayerInput();
+	void ReleasePaddle();
+	void StartPaddle();
 	
 	float deltaYaw = 0.0f;
+
+	bool paddleReleaseAction;
+	bool paddleStartAction;
 
 
 };

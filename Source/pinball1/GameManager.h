@@ -32,4 +32,6 @@ public:
 	AGamePaddle* paddleLeft;
 	AGamePaddle* paddleRight;
 
+	
+
 };

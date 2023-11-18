@@ -29,7 +29,9 @@ class Apinball1Character : public ACharacter
 	/** Right Paddle Shift Trigger Keyboard */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* RightPaddleKey;
-
+	/** Spacebar Plunger Trigger Keyboard */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* SpacePlungerKey;
 
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -86,9 +88,15 @@ public:
 	void LeftPaddleStart();
 	void LeftPaddleTriggered();
 	void LeftPaddleCompleted();
+
 	void RightPaddleStart();
 	void RightPaddleTriggered();
 	void RightPaddleCompleted();
+
+	void SpacePlungerStart();
+	void SpacePlungerTriggered();
+	void SpacePlungerCompleted();
+
 
 };
 
