@@ -17,13 +17,8 @@ public:
 	// Sets default values for this actor's properties
 	AGameBall();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	void InitBall();
+	void UpdateBall(float DeltaTime);
 
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
@@ -33,5 +28,11 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	USphereComponent* TriggerSphere;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ID")
+	int32 ballID;
+
+	FVector HitImpulse;
+	bool inPlay;
 
 };

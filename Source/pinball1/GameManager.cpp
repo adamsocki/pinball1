@@ -67,6 +67,26 @@ void AGameManager::BeginPlay()
 			}
 		}
 	}
+
+
+	TArray<AActor*> FoundBallActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AGameBall::StaticClass(), FoundBallActors);
+	for (int i = 0; i < FoundBallActors.Num(); i++)
+	{
+		// ADD ALL BUILDINGS IN LEVEL TO AN ARRAY
+		AGameBall* GameBall = Cast<AGameBall>(FoundBallActors[i]);
+		if (GameBall != nullptr)
+		{
+			if (GameBall->ballID == 1)
+			{
+				ball01 = GameBall;
+				if (plunger01)
+				{
+					ball01->InitBall();
+				}
+			}
+		}
+	}
 }
 
 
@@ -80,5 +100,6 @@ void AGameManager::Tick(float DeltaTime)
 	paddleRight->UpdatePaddle();
 
 	plunger01->UpdatePlunger(DeltaTime);
+	ball01->UpdateBall(DeltaTime);
 }
 

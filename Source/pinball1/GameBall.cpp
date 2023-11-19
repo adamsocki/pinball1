@@ -5,6 +5,7 @@
 #include "Components/PrimitiveComponent.h"
 #include "TheGround.h"
 #include "GamePaddle.h"
+#include "GamePlunger.h"
 
 // Sets default values
 AGameBall::AGameBall()
@@ -51,53 +52,61 @@ AGameBall::AGameBall()
 }
 
 // Called when the game starts or when spawned
-void AGameBall::BeginPlay()
+void AGameBall::InitBall()
 {
-    Super::BeginPlay();
-    RerunConstructionScripts();
     BallMesh->OnComponentHit.AddDynamic(this, &AGameBall::OnHit);
-
-
+    inPlay = false;
 }
 
-// Called every frame
-void AGameBall::Tick(float DeltaTime)
+void AGameBall::UpdateBall(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
-    FVector impulse = FVector(0.0f, 0.0f, -500.0f);
-    BallMesh->AddImpulse(impulse, NAME_None, true);
+
+    if (inPlay)
+    {
+        FVector movementImpulse = FVector(-160.0f, 0.0f, -130.0f);
+
+        
+        FVector totalImpulse = movementImpulse + HitImpulse;
+
+        BallMesh->AddImpulse(totalImpulse, NAME_None, true);
 
 
+        HitImpulse = FVector(0.0f, 0.0f, 0.0f);
+    }
 }
 
 
 void AGameBall::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 
-    if (HitComponent)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Hit Component: %s"), *HitComponent->GetName());
-    }
+    //if (HitComponent)
+    //{
+    //    UE_LOG(LogTemp, Warning, TEXT("Hit Component: %s"), *HitComponent->GetName());
+    //}
 
-    // Print the name of the other actor involved in the collision
-    if (OtherActor)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Other Actor: %s"), *OtherActor->GetName());
-    }
+    //// Print the name of the other actor involved in the collision
+    //if (OtherActor)
+    //{
+    //    UE_LOG(LogTemp, Warning, TEXT("Other Actor: %s"), *OtherActor->GetName());
+    //}
 
-    // Print the normal of the hit surface
-    UE_LOG(LogTemp, Warning, TEXT("Hit Surface Normal: %s"), *Hit.ImpactNormal.ToString());
+    //// Print the normal of the hit surface
+    //UE_LOG(LogTemp, Warning, TEXT("Hit Surface Normal: %s"), *Hit.ImpactNormal.ToString());
 
-    // Print the location of the hit
-    UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *Hit.ImpactPoint.ToString());
-
-
-    /*ATheGround *groundMesh = Cast<ATheGround>(OtherActor);
-    if (groundMesh)
+    //// Print the location of the hit
+    //UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *Hit.ImpactPoint.ToString());
+    AGamePlunger *gamePlunger = Cast<AGamePlunger>(OtherActor);
+    if (gamePlunger)
     {
         return;
     }
 
+    ATheGround *groundMesh = Cast<ATheGround>(OtherActor);
+    if (groundMesh)
+    {
+        return;
+    }
+    /*
     AGamePaddle* gamePaddle = Cast<AGamePaddle>(OtherActor);
     if (gamePaddle)
     {
@@ -112,7 +121,7 @@ void AGameBall::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPr
 
     // You might want to multiply by a factor to control the strength of the impulse
     float ImpulseStrength = 200.0f; // Adjust this value as needed
-    FVector FinalImpulse = ReverseImpulse * ImpulseStrength;
+//   /FVector FinalImpulse = ReverseImpulse * ImpulseStrength;
 
     // Apply the impulse to the ball
     //BallMesh->AddImpulse(FinalImpulse, NAME_None, true);

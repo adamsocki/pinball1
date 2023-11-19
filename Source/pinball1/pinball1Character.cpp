@@ -155,6 +155,7 @@ void Apinball1Character::LeftPaddleTriggered()
 void Apinball1Character::LeftPaddleCompleted()
 {
 	gameManager->paddleLeft->PaddleReleasePlayerInput();
+
 }
 
 // RIGHT PADDLE CODE FUNCTIONS
@@ -184,6 +185,9 @@ void Apinball1Character::SpacePlungerTriggered()
 
 void Apinball1Character::SpacePlungerCompleted()
 {
+	//gameManager->plunger01->PlungerReleasePlayerInput();
+	gameManager->ball01->inPlay = true;
+	gameManager->ball01->HitImpulse = FVector(15500.0f, 0.0f, 0.0f);
 
 }
 

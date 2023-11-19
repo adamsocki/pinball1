@@ -37,7 +37,7 @@ void AGamePlunger::UpdatePlunger(float DeltaTime)
         PlungerStart();
 	}
 
-	if (plungerStartAction)
+	if (plungerReleaseAction)
 	{
         PlungerRelease();
 	}
@@ -63,12 +63,12 @@ void AGamePlunger::PlungerReleasePlayerInput()
 void AGamePlunger::PlungerStart()
 {
     FVector CurrentLocation = GetActorLocation();
-    float movementSpeed = -100.0f; 
+    float movementSpeed = -300.0f; 
     float DeltaTime = GetWorld()->GetDeltaSeconds();
     //  UE_LOG(LogTemp, Warning, TEXT("Accum ST 1: %f"), AccumulatedRotation);
 
     float DesiredPositionOffset = movementSpeed * DeltaTime;
-    float MaxMovement = 385.0f; // set your max rotation limit here
+    float MaxMovement = 800.0f; // set your max rotation limit here
     
     if (FMath::Abs(accumulatedMovement + DesiredPositionOffset) > MaxMovement)
     {
@@ -85,5 +85,28 @@ void AGamePlunger::PlungerStart()
 }
 void AGamePlunger::PlungerRelease()
 {
+    FVector CurrentLocation = GetActorLocation();
+    float movementSpeed = 8900.0f;
+    float DeltaTime = GetWorld()->GetDeltaSeconds();
+    //  UE_LOG(LogTemp, Warning, TEXT("Accum ST 1: %f"), AccumulatedRotation);
+
+    float DesiredPositionOffset = movementSpeed * DeltaTime;
+    float MinMovement = 0.0f; // set your max rotation limit here
+    UE_LOG(LogTemp, Warning, TEXT("Accum RET 1: %f"), accumulatedMovement);
+
+
+    if (accumulatedMovement + DesiredPositionOffset > MinMovement)
+    {
+        DesiredPositionOffset = MinMovement - FMath::Abs(accumulatedMovement);
+        DesiredPositionOffset *= FMath::Sign(movementSpeed);
+        plungerReleaseAction = false;
+    }
+
+    FVector MovementOffset = FVector(0.0f, 0.0f, DesiredPositionOffset);
+    AddActorLocalOffset(MovementOffset);
+
+    accumulatedMovement += DesiredPositionOffset;
+     UE_LOG(LogTemp, Warning, TEXT("Accum RET 2: %f"), accumulatedMovement);
+
 }
 
