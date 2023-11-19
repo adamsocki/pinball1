@@ -22,10 +22,19 @@ public:
 	void InitPlunger();
 	void UpdatePlunger(float DeltaTime);
 
+	void PlungerStartPlayerInput();
+	void PlungerReleasePlayerInput();
+
+	void PlungerStart();
+	void PlungerRelease();
 
 	bool plungerStartAction;
 	bool plungerReleaseAction;
 
-	float actionTimer;
+	float accumulatedMovement;
+	float accumulatedActionTimer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlungerID")
+	int32 plungerID;
 
 };

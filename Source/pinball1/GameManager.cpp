@@ -23,7 +23,6 @@ void AGameManager::BeginPlay()
 	TArray<AActor*> FoundPaddleActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AGamePaddle::StaticClass(), FoundPaddleActors);
 
-
 	for (int i = 0; i < FoundPaddleActors.Num(); i++)
 	{
 		// ADD ALL BUILDINGS IN LEVEL TO AN ARRAY
@@ -32,11 +31,39 @@ void AGameManager::BeginPlay()
 		{
 			if (GamePaddle->paddleSide == EPaddleSide::PaddleSide_Left)
 			{
-				paddleLeft = GamePaddle;
+				paddleLeft = GamePaddle; 
+				if (paddleLeft)
+				{
+					paddleLeft->InitPaddle();
+				}
 			}
 			else if (GamePaddle->paddleSide == EPaddleSide::PaddleSide_Right)
 			{
 				paddleRight = GamePaddle;
+				if (paddleRight)
+				{
+					paddleRight->InitPaddle();
+				}
+			}
+		}
+	}
+
+
+	TArray<AActor*> FoundPlungerActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AGamePlunger::StaticClass(), FoundPlungerActors);
+	for (int i = 0; i < FoundPlungerActors.Num(); i++)
+	{
+		// ADD ALL BUILDINGS IN LEVEL TO AN ARRAY
+		AGamePlunger* GamePlunger = Cast<AGamePlunger>(FoundPlungerActors[i]);
+		if (GamePlunger != nullptr)
+		{
+			if (GamePlunger->plungerID == 1)
+			{
+				plunger01 = GamePlunger;
+				if (plunger01)
+				{
+					plunger01->InitPlunger();
+				}
 			}
 		}
 	}
@@ -52,6 +79,6 @@ void AGameManager::Tick(float DeltaTime)
 	paddleLeft->UpdatePaddle();
 	paddleRight->UpdatePaddle();
 
-
+	plunger01->UpdatePlunger(DeltaTime);
 }
 

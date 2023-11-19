@@ -9,4 +9,5 @@ Ground::Ground()
 	GroundMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GroundMesh"));
 	RootComponent = GroundMesh;
 
+
 }

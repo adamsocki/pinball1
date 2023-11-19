@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "GamePaddle.h"
+#include "GamePlunger.h"
 
 
 #include "GameManager.generated.h"
@@ -32,6 +33,7 @@ public:
 	AGamePaddle* paddleLeft;
 	AGamePaddle* paddleRight;
 
+	AGamePlunger* plunger01;
 	
 
 };

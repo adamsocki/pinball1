@@ -174,7 +174,7 @@ void Apinball1Character::RightPaddleCompleted()
 // SPACE PLUNGER CODE FUNCTIONS
 void Apinball1Character::SpacePlungerStart()
 {
-
+	gameManager->plunger01->PlungerStartPlayerInput();
 }
 
 void Apinball1Character::SpacePlungerTriggered()
