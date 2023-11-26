@@ -32,6 +32,9 @@ class Apinball1Character : public ACharacter
 	/** Spacebar Plunger Trigger Keyboard */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* SpacePlungerKey;
+	/** Debug Restarter Trigger Keyboard */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* RestartDebugKey;
 
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -96,6 +99,8 @@ public:
 	void SpacePlungerStart();
 	void SpacePlungerTriggered();
 	void SpacePlungerCompleted();
+
+	void ResetDebugStart();
 
 
 };

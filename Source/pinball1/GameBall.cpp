@@ -6,6 +6,7 @@
 #include "TheGround.h"
 #include "GamePaddle.h"
 #include "GamePlunger.h"
+#include "BallRestarter.h"
 
 // Sets default values
 AGameBall::AGameBall()
@@ -41,37 +42,61 @@ AGameBall::AGameBall()
     //TriggerSphere->SetupAttachment(BallMesh);
     // Bind the overlap event
     //TriggerSphere->OnComponentBeginOverlap.AddDynamic(this, &AResident::OnOverlapBegin);
-    BallMesh->SetSimulatePhysics(true);
+    //BallMesh->SetSimulatePhysics(true);
+    //BallMesh->WakeRigidBody();
+    //BallMesh->BodyInstance.SetCollisionProfileName(TEXT("PhysicsActor"));
+    //BallMesh->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
+    //BallMesh->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Block);
+    //BallMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+    //BallMesh->SetNotifyRigidBodyCollision(true);
+    //FBodyInstance* BodyInst = BallMesh->GetBodyInstance();
+    //BodyInst->MassScale = 1000.0f;
+    //BodyInst->UpdateMassProperties();
+
+}
+void AGameBall::LaunchBall(float LaunchStrength)
+{
+    FVector LaunchImpulse = FVector(LaunchStrength, 0.0f, 0.0f); // Adjust direction and strength
+    BallMesh->AddImpulse(LaunchImpulse, NAME_None, true);
+    inPlay = true;
+}
+
+// Called when the game starts or when spawned
+void AGameBall::InitBall()
+{
+   /* BallMesh->SetSimulatePhysics(true);
     BallMesh->WakeRigidBody();
     BallMesh->BodyInstance.SetCollisionProfileName(TEXT("PhysicsActor"));
     BallMesh->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
     BallMesh->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Block);
     BallMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
     BallMesh->SetNotifyRigidBodyCollision(true);
-
-}
-
-// Called when the game starts or when spawned
-void AGameBall::InitBall()
-{
     BallMesh->OnComponentHit.AddDynamic(this, &AGameBall::OnHit);
+    BallMesh->SetEnableGravity(true);
+    FBodyInstance* BodyInst = BallMesh->GetBodyInstance();
+    BodyInst->MassScale = 1000.0f;
+    BodyInst->UpdateMassProperties();*/
+
     inPlay = false;
+
 }
 
 void AGameBall::UpdateBall(float DeltaTime)
 {
+    UE_LOG(LogTemp, Warning, TEXT("Applying Gravity Force: %s"), *GravityImpulse.ToString());
 
     if (inPlay)
     {
-        FVector movementImpulse = FVector(-160.0f, 0.0f, -130.0f);
+        //FVector GravityImpulse = FVector( -GravityStrength * DeltaTime, 0.0f, 0.0f);
+        UE_LOG(LogTemp, Warning, TEXT("Applying Gravity Force Pre: %s"), *GravityImpulse.ToString());
 
-        
-        FVector totalImpulse = movementImpulse + HitImpulse;
+        //GravityImpulse *= DeltaTime;
+        BallMesh->AddForce(GravityImpulse * GravityMult);
+        UE_LOG(LogTemp, Warning, TEXT("DeltaTime: %f"), DeltaTime);
 
-        BallMesh->AddImpulse(totalImpulse, NAME_None, true);
+        UE_LOG(LogTemp, Warning, TEXT("Applying Gravity Force Post: %s"), *GravityImpulse.ToString());
 
 
-        HitImpulse = FVector(0.0f, 0.0f, 0.0f);
     }
 }
 
@@ -106,6 +131,13 @@ void AGameBall::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPr
     {
         return;
     }
+
+    ABallRestarter* ballRestarter = Cast<ABallRestarter>(OtherActor);
+    if (ballRestarter)
+    {
+        RestartBall();
+        return;
+    }
     /*
     AGamePaddle* gamePaddle = Cast<AGamePaddle>(OtherActor);
     if (gamePaddle)
@@ -129,4 +161,22 @@ void AGameBall::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPr
 
     // Apply the response impulse to the ball
     //BallMesh->AddImpulse(ResponseImpulse, NAME_None, true);
+}
+
+void AGameBall::RestartBall()
+{
+
+    SetActorLocation(FVector(9902.739287, 4222.935824, 749.418236));
+    //BallMesh->SetPhysicsLinearVelocity(FVector(0.0f, 0.0f, 0.0f));
+    //BallMesh->SetLinearDamping(0.0f);
+    //BallMesh->SetF
+
+    // Stop all angular movement
+    //BallMesh->SetPhysicsAngularVelocityInDegrees(FVector(0.0f, 0.0f, 0.0f));
+
+    // Clear any forces that might be applied
+    //BallMesh->ClearAllPhysicsForces();
+    //BallMesh->Forces
+    //BallMesh->ClearAccumulatedForces();
+    inPlay = false;
 }

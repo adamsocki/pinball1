@@ -34,5 +34,19 @@ public:
 
 	FVector HitImpulse;
 	bool inPlay;
+	FVector movementImpulse;
 
+	void RestartBall();
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ID")
+	float GravityStrength;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ID")
+	FVector GravityImpulse;
+
+	void LaunchBall(float LaunchStrength);
+
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ID")
+	float GravityMult;
 };

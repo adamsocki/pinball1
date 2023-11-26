@@ -41,6 +41,13 @@ Apinball1Character::Apinball1Character()
 	{
 		SpacePlungerKey = PlungerSpaceKeyboard.Object;
 	}
+	
+	static ConstructorHelpers::FObjectFinder<UInputAction> RestartDebugKeyboard(TEXT("/Script/EnhancedInput.InputAction'/Game/ThirdPerson/Input/Actions/IA_Reset_DEBUG.IA_Reset_DEBUG'"));
+	if (RestartDebugKeyboard.Succeeded())
+	{
+		RestartDebugKey = RestartDebugKeyboard.Object;
+	}
+
 		
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
@@ -134,6 +141,10 @@ void Apinball1Character::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindAction(SpacePlungerKey, ETriggerEvent::Started, this, &Apinball1Character::SpacePlungerStart);
 		EnhancedInputComponent->BindAction(SpacePlungerKey, ETriggerEvent::Triggered, this, &Apinball1Character::SpacePlungerTriggered);
 		EnhancedInputComponent->BindAction(SpacePlungerKey, ETriggerEvent::Completed, this, &Apinball1Character::SpacePlungerCompleted);
+
+		// RESET DEBUG
+		EnhancedInputComponent->BindAction(RestartDebugKey, ETriggerEvent::Started, this, &Apinball1Character::ResetDebugStart);
+
 	
 	}
 	else
@@ -187,8 +198,13 @@ void Apinball1Character::SpacePlungerCompleted()
 {
 	//gameManager->plunger01->PlungerReleasePlayerInput();
 	gameManager->ball01->inPlay = true;
-	gameManager->ball01->HitImpulse = FVector(15500.0f, 0.0f, 0.0f);
+	//gameManager->ball01->HitImpulse = FVector(15500.0f, 0.0f, 0.0f);
+	gameManager->ball01->LaunchBall(9000.0f);
+}
 
+void Apinball1Character::ResetDebugStart()
+{
+	gameManager->ball01->RestartBall();
 }
 
 void Apinball1Character::Move(const FInputActionValue& Value)
