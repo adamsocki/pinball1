@@ -2,6 +2,7 @@
 
 
 #include "GamePaddle.h"
+#include "HitActor.h"
 
 // Sets default values
 AGamePaddle::AGamePaddle()
@@ -24,7 +25,8 @@ AGamePaddle::AGamePaddle()
     }
 
     PaddleMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-
+    UActorComponent* HitComponent = CreateDefaultSubobject<UHitActor>(TEXT("HitComp"));
+    
 }
 
 
